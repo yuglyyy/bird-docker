@@ -1,0 +1,36 @@
+services:
+  birds:
+    image: heslsftp/bird-files:latest
+    container_name: birds
+    restart: unless-stopped
+    devices:
+      - "/dev/snd:/dev/snd"
+    volumes:
+      - /home/pi/data/recordings:/opt/bird-files/recordings
+      - /home/pi/data/data_temp_Audios:/opt/bird-files/data_temp/Audios
+
+    environment:
+      TZ: Asia/Singapore
+      RECORDINGS_DIR: /opt/bird-files/recordings
+
+      RECORD_CMD: python -u record/record_upload.py
+      PREDICT_CMD: python -u record/Code/predict_on_audio.py
+
+      ARECORD_DEVICE: plug:mic_in
+      FORCE_ARECORD_DEVICE: "1"
+
+    # defining virtual mic (dsnoop) before starting runner
+    command: >
+      bash -lc 'printf "%s\n"
+      "pcm.mic_in {"
+      "  type dsnoop"
+      "  ipc_key 1024"
+      "  slave { pcm \"hw:2,0\" channels 2 }"
+      "  bindings.0 0"
+      "  bindings.1 1"
+      "}"
+      "ctl.mic_in { type hw; card 2; }"
+      > /etc/asound.conf;
+      echo "[asound] defined dsnoop pcm=mic_in on hw:2,0";
+      arecord -L | grep mic_in || true;
+      exec /usr/local/bin/run-birds.sh'
