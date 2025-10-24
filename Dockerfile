@@ -22,8 +22,12 @@ RUN set -eux; \
         libasound2 \
         alsa-utils \
         ffmpeg \
+        procps \
+        lftp \
+        sox libsox-fmt-all \
         git \
-        ca-certificates; \
+        ca-certificates \
+        build-essential; \
     rm -rf /var/lib/apt/lists/*
 
 # pytorch 2.2 line for python 3.11 + ultralytics
@@ -42,10 +46,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
       audioread \
       resampy \
       matplotlib==3.8.* \
-      pydub
+      pydub \ 
+      boto3
 
 # repo
-ARG REPO_URL="https://github.com/maegicakes/bird-files.git"
+ARG REPO_URL="https://github.com/yuglyyy/bird-files.git"
 ARG REPO_REF="main"
 RUN git clone --depth=1 -b "$REPO_REF" "$REPO_URL" /opt/bird-files
 

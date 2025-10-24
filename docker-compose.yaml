@@ -1,27 +1,32 @@
+# docker-compose.yml
 services:
   birds:
-    image: heslsftp/bird-files:latest
-    container_name: birds
+    image: yuglyyy/bird-files:latest
+    container_name: new-birds
     restart: unless-stopped
-    devices:
-      - "/dev/snd:/dev/snd"
+    env_file:
+      - .env
+    working_dir: /opt/bird-files
     volumes:
-      - /home/pi/data/recordings:/opt/bird-files/recordings
-      - /home/pi/data/data_temp_Audios:/opt/bird-files/data_temp/Audios
-
+      - .:/opt/bird-files
+      - ./data/recordings:/opt/bird-files/record/recordings
+      - ./data/data_temp_Audios:/opt/bird-files/record/data_temp/Audios
+      - ./data/data_temp_Segments:/opt/bird-files/record/data_temp/Segments
+    # for the pi
+    devices:
+      - /dev/snd:/dev/snd
+    group_add:
+      - audio
     environment:
-      TZ: Asia/Singapore
-      RECORDINGS_DIR: /opt/bird-files/recordings
-
-      RECORD_CMD: python -u record/record_upload.py
+      # sensible defaults (can be overridden by overrides or .env)
+      RECORD_CMD: pxython -u record/record_upload.py
       PREDICT_CMD: python -u record/Code/predict_on_audio.py
-
+      MOCK_OUT_DIR: /opt/bird-files/record/data_temp/Audios
+      MOCK_DURATION: "5"
+      PYTHONPATH: /opt/bird-files
       ARECORD_DEVICE: plug:mic_in
       FORCE_ARECORD_DEVICE: "1"
-
-    # defining virtual mic (dsnoop) before starting runner
-    command: >
-      bash -lc 'printf "%s\n"
+    command: bash -lc 'printf "%s\n"
       "pcm.mic_in {"
       "  type dsnoop"
       "  ipc_key 1024"
