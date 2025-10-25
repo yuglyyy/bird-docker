@@ -8,10 +8,10 @@ services:
       - .env
     working_dir: /opt/bird-files
     volumes:
-      - .:/opt/bird-files
-      - ./data/recordings:/opt/bird-files/record/recordings
-      - ./data/data_temp_Audios:/opt/bird-files/record/data_temp/Audios
-      - ./data/data_temp_Segments:/opt/bird-files/record/data_temp/Segments
+      - ../bird-files/data/recordings:/opt/bird-files/record/recordings
+      - ../bird-files/data/data_temp_Audios:/opt/bird-files/record/data_temp/Audios
+      - ../bird-files/data/data_temp_Segments:/opt/bird-files/record/data_temp/Segments
+      - ../bird-files/data/tmp:/opt/bird-files/record/tmp
     # for the pi
     devices:
       - /dev/snd:/dev/snd
