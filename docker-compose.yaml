@@ -19,7 +19,7 @@ services:
       - audio
     environment:
       # sensible defaults (can be overridden by overrides or .env)
-      RECORD_CMD: pxython -u record/record_upload.py
+      RECORD_CMD: python -u record/record_upload.py
       PREDICT_CMD: python -u record/Code/predict_on_audio.py
       MOCK_OUT_DIR: /opt/bird-files/record/data_temp/Audios
       MOCK_DURATION: "5"
