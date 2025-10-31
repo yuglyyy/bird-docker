@@ -12,6 +12,8 @@ services:
       - ../bird-files/data/data_temp_Audios:/opt/bird-files/record/data_temp/Audios
       - ../bird-files/data/data_temp_Segments:/opt/bird-files/record/data_temp/Segments
       - ../bird-files/data/tmp:/opt/bird-files/record/data_temp/tmp
+      - ../bird-files/data/s3_data:/opt/bird-files/record/data
+
     # for the pi
     devices:
       - /dev/snd:/dev/snd
